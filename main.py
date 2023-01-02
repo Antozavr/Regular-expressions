@@ -1,5 +1,6 @@
 import csv
 import re
+from pprint import pprint
 
 with open("phonebook_raw.csv") as f:
     rows = csv.reader(f, delimiter=",")
@@ -22,6 +23,8 @@ for column in contacts_list[1:]:
         column[0] = re.sub(name_pattern, name_sub, names).split()[0]
         column[1] = ''
         column[2] = ''
+
+
 phone_pattern = re.compile(
     r'(\+7|8)?\s*\(?(\d{3})\)?\s*\D?(\d{3})[-\s+]?(\d{2})-?(\d{2})((\s)?\(?(доб.)?\s?(\d+)\)?)?')
 phone_substitution = r'+7(\2)\3-\4-\5\7\8\9'
@@ -44,9 +47,18 @@ for column in contacts_list:
                     column[5] = contact[5]
                 if column[6] == '':
                     column[6] = contact[6]
+
 for contact in contacts_list:
     if contact not in new_book:
-        new_book.append(contact)
+        if len(contact) > 7:
+            pass
+        else:
+            new_book.append(contact)
+    else:
+        pass
+
+print(new_book)
+
 with open("phonebook.csv", "w", encoding='utf-8') as f:
     datawriter = csv.writer(f, delimiter=',')
     datawriter.writerows(new_book)
